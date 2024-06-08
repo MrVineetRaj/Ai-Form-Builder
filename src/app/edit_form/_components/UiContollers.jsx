@@ -1,87 +1,73 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { SaveIcon } from "lucide-react";
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 
-} from "@/components/ui/select";
-import { themes } from "@/app/_data/themes";
-import { gradientBg } from "@/app/_data/gradientBg";
-import { textColor } from "@/app/_data/textColor";
-
-const UiControllers = ({ setSelectedTheme , setBgColor,setTextColor,setHeadingColor}) => {
+const UiControllers = ({
+  setBgColor,
+  setTextColor,
+  setHeadingColor,
+  setButtonTextColor,
+  onColorUpdate,
+  controlPanelRender,
+}) => {
   return (
-    <div className="flex flex-col justify-center items-center h-full">
-      <Select
-        className="w-full "
-        onValueChange={(value) => {
-          setSelectedTheme(value);
+    <div className="flex flex-col  items-end h-full">
+      <h2 className="mt-8 my-2 text-xl font-bold ">Heading Color</h2>
+      {controlPanelRender && (
+        <input
+          className="rounded-full w-full h-5 overflow-hidden cursor-pointer"
+          type="color"
+          onChange={(event) => {
+            setHeadingColor(event.target.value);
+          }}
+        />
+      )}
+      <h2 className="mt-8 my-2 text-xl font-bold flex justify-between items-center gap-2">
+        Text Color{" "}
+      </h2>
+      {controlPanelRender && (
+        <input
+          className="rounded-full w-full h-5 overflow-hidden cursor-pointer"
+          type="color"
+          onChange={(event) => {
+            setTextColor(event.target.value);
+          }}
+        />
+      )}
+      <h2 className="mt-8 my-2 text-xl font-bold flex justify-between items-center gap-2">
+        Button Text Color{" "}
+      </h2>
+      {controlPanelRender && (
+        <input
+          className="rounded-full w-full h-5 overflow-hidden cursor-pointer"
+          type="color"
+          defaultValue={"#ffffff"}
+          onChange={(event) => {
+            setButtonTextColor(event.target.value);
+          }}
+        />
+      )}
+      <h2 className="mt-8 my-2 text-xl font-bold">Background </h2>
+      {controlPanelRender && (
+        <input
+          className="rounded-full w-full h-5 overflow-hidden cursor-pointer"
+          defaultValue={"#ffffff"}
+          type="color"
+          onChange={(event) => {
+            setBgColor(event.target.value);
+          }}
+        />
+      )}
+      <Button
+        className="mt-8 w-full "
+        onClick={() => {
+          onColorUpdate();
         }}
       >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent>
-          {themes.map((theme, index) => {
-            return (
-              <SelectItem key={index} value={theme.name}>
-                {theme.name}
-              </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
-
-      <h2 className="mt-8 my-2 text-xl font-bold">Heading Color</h2>
-      <div className="flex flex-wrap w-full">
-      {textColor.map((color, index) => {
-          return (
-            <div
-              key={index}
-              className="rounded-lg w-10 h-10 m-1 cursor-pointer"
-              style={{
-                background: color.color,
-              }}
-              onClick={() => setHeadingColor(color.color)}
-            ></div>
-          );
-        })}
-      </div>
-      <h2 className="mt-8 my-2 text-xl font-bold">Text Color</h2>
-      <div className="flex flex-wrap w-full">
-        {textColor.map((color, index) => {
-          return (
-            <div
-              key={index}
-              className="rounded-lg w-10 h-10 m-1 cursor-pointer"
-              style={{
-                background: color.color,
-              }}
-              onClick={() => setTextColor(color.color)}
-            ></div>
-          );
-        })}
-      </div>
-      
-      <h2 className="mt-8 my-2 text-xl font-bold">Background</h2>
-      <div className="flex flex-wrap w-full">
-        {gradientBg.map((bg, index) => {
-          return (
-            <div
-              key={index}
-              className="rounded-lg w-10 h-10 m-1 cursor-pointer"
-              style={{
-                backgroundImage: bg.gradient,
-              }}
-              onClick={() => setBgColor(bg.gradient)}
-            ></div>
-          );
-        })}
-      </div>
+        <SaveIcon /> Save{" "}
+      </Button>
     </div>
   );
 };

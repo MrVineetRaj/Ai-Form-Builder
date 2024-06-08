@@ -11,6 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../config/firestoreConfig";
+import { textColor } from "@/app/_data/textColor";
 
 // Add a new document in collection "cities"
 export const createForms = async (formsData, userId) => {
@@ -22,6 +23,12 @@ export const createForms = async (formsData, userId) => {
       createdAt: new Date().toISOString(),
       formData: JSON.parse(formsData),
       lastUpdated: new Date().toISOString(),
+      colors: {
+        textColor: "#000000",
+        bgColor: "#ffffff",
+        headingColor: "#000000",
+        buttonTextColor: "#ffffff",
+      },
     });
 
     return docId;
@@ -58,6 +65,19 @@ export const updateForm = async (formId, formData) => {
   try {
     await updateDoc(docRef, {
       formData: formData,
+      lastUpdated: new Date().toISOString(),
+    });
+    return true;
+  } catch (e) {
+    console.error("Error updating document: ", e);
+  }
+};
+
+export const updateColors = async (formId, newColors) => {
+  const docRef = doc(db, "forms", formId);
+  try {
+    await updateDoc(docRef, {
+      colors: newColors,
       lastUpdated: new Date().toISOString(),
     });
     return true;

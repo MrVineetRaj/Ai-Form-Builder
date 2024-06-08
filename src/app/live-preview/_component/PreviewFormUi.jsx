@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React  from "react";
 import {
   Select,
   SelectContent,
@@ -14,45 +14,21 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import FieldEdit from "./FieldEdit";
 
-const FormUi = ({
+const PreViewFormUi = ({
   formData,
-  onFormUpdate,
 
   bgColor,
   textColor,
   headingColor,
   buttonTextColor,
 }) => {
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData]);
-
-  useEffect(() => {
-    setRenderKey(renderKey + 1);
-  }, [bgColor, textColor, headingColor, buttonTextColor]);
-
-  const [renderKey, setRenderKey] = useState(0);
-  const onUpdate = (data, index) => {
-    let newFormData = formData;
-
-    newFormData.fields[index].fieldLabel = data.fieldLabel;
-    newFormData.fields[index].placeholder = data.placeholder;
-    onFormUpdate(formData);
     
-  };
 
-  const deleteField = (index) => {
-    let newFormData = formData;
-    newFormData.fields.splice(index, 1);
-    onFormUpdate(formData);
-  };
   return (
     <div className="w-[100%] flex justify-center items-center min-h-screen p-4 ">
       <div
         className="flex flex-col items-center justify-center  w-[60%] md:w-[60%] max-w-[600px] p-4  border rounded-md"
-        key={renderKey}
         style={{ background: bgColor, color: textColor }}
       >
         <h1
@@ -91,12 +67,7 @@ const FormUi = ({
                         ))}
                       </SelectContent>
                     </Select>
-                    <FieldEdit
-                      index={index}
-                      defaultValue={field}
-                      onUpdate={onUpdate}
-                      deleteField={deleteField}
-                    />
+                    
                   </div>
                 );
               } else if (
@@ -112,12 +83,6 @@ const FormUi = ({
                     >
                       {field.fieldLabel}
 
-                      <FieldEdit
-                        index={index}
-                        defaultValue={field}
-                        onUpdate={onUpdate}
-                        deleteField={deleteField}
-                      />
                     </Label>
                     <Textarea
                       key={index}
@@ -150,12 +115,7 @@ const FormUi = ({
                           </div>
                         );
                       })}
-                    <FieldEdit
-                      index={index}
-                      defaultValue={field}
-                      onUpdate={onUpdate}
-                      deleteField={deleteField}
-                    />
+                    
                   </RadioGroup>
                 );
               } else if (
@@ -168,12 +128,7 @@ const FormUi = ({
                     <div className=" gap-4 items-center mt-4 " key={index}>
                       <Label className="flex justify-between items-center">
                         {field.fieldLabel}
-                        <FieldEdit
-                          index={index}
-                          defaultValue={field}
-                          onUpdate={onUpdate}
-                          deleteField={deleteField}
-                        />
+                        
                       </Label>
                       <div className="flex  gap-2  ">
                         {field.options.map((option, index) => {
@@ -203,12 +158,7 @@ const FormUi = ({
                         {field.fieldLabel}
                       </Label>
 
-                      <FieldEdit
-                        index={index}
-                        defaultValue={field}
-                        onUpdate={onUpdate}
-                        deleteField={deleteField}
-                      />
+                      
                     </div>
                   );
                 }
@@ -220,12 +170,7 @@ const FormUi = ({
                       className=" text-sm flex justify-between items-center "
                     >
                       {field.fieldLabel}
-                      <FieldEdit
-                        index={index}
-                        defaultValue={field}
-                        onUpdate={onUpdate}
-                        deleteField={deleteField}
-                      />
+                     
                     </Label>
                     <Input
                       className="w-full p-2 border rounded my-1 text-black"
@@ -264,4 +209,4 @@ const FormUi = ({
   );
 };
 
-export default FormUi;
+export default PreViewFormUi;

@@ -55,7 +55,7 @@ const CreateForm = () => {
             <DialogTitle>Create New Form</DialogTitle>
             <DialogDescription>
               <Textarea
-                className="my-2"
+                className="my-2 text-black font-semibold"
                 placeholder={`${userInput || "Write description for you form"}`}
                 onChange={(e) => setUserInput(e.target.value)}
               />
