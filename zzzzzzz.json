@@ -1,0 +1,53 @@
+{
+  "formTitle": "Preferences Form",
+  "formSubheading": "Tell us about your interests!",
+  "fields": [
+    {
+      "tag": "input",
+      "fieldName": "preferredContact",
+      "placeholder": "",
+      "fieldLabel": "Preferred Contact Method",
+      "fieldType": "radio",
+      "fieldRequired": true,
+      "options": [
+        { "value": "email", "label": "Email" },
+        { "value": "phone", "label": "Phone" },
+        { "value": "mail", "label": "Mail" }
+      ]
+    },
+    {
+      "tag": "input",
+      "fieldName": "newsletter",
+      "placeholder": "",
+      "fieldLabel": "Subscribe to Newsletter",
+      "fieldType": "checkbox",
+      "fieldRequired": false
+    },
+    {
+      "tag": "input",
+      "fieldName": "promotions",
+      "placeholder": "",
+      "fieldLabel": "Receive Promotional Offers",
+      "fieldType": "checkbox",
+      "fieldRequired": false
+    },
+    {
+      "tag": "input",
+      "fieldName": "interests",
+      "placeholder": "",
+      "fieldLabel": "Interests",
+      "fieldType": "checkbox",
+      "fieldRequired": false,
+      "options": [
+        { "value": "music", "label": "Music" },
+        { "value": "movies", "label": "Movies" },
+        { "value": "sports", "label": "Sports" },
+        { "value": "travel", "label": "Travel" }
+      ]
+    }
+  ],
+  "buttons": [
+    { "type": "submit", "value": "Submit" },
+    { "type": "reset", "value": "Reset" }
+  ]
+}
