@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -14,18 +14,55 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
+import FieldEdit from "./FieldEdit";
 
-const FormUi = ({ formData }) => {
+const FormUi = ({
+  formData,
+  onFormUpdate,
+  selectedTheme,
+  bgColor,
+  textColor,
+  headingColor,
+}) => {
   useEffect(() => {
     console.log("formData", formData);
   }, [formData]);
+
+  const [renderKey, setRenderKey] = useState(0);
+  const onUpdate = (data, index) => {
+    let newFormData = formData;
+
+    newFormData.fields[index].fieldLabel = data.fieldLabel;
+    newFormData.fields[index].placeholder = data.placeholder;
+    onFormUpdate(formData);
+    // console.log(newFormData);
+  };
+
+  const deleteField = (index) => {
+    let newFormData = formData;
+    newFormData.fields.splice(index, 1);
+    onFormUpdate(formData);
+  };
+
+  useEffect(() => {
+    
+    setRenderKey(renderKey + 1);
+  }, [selectedTheme, bgColor, textColor, headingColor]);
   return (
-    <div className="w-[100%] flex justify-center items-center min-h-screen p-4">
-      <div className="flex flex-col items-center justify-center  w-[60%] md:w-[60%] max-w-[600px] p-4  border">
-        <h1 className="text-3xl font-extrabold text-primary text-center">
+    <div className="w-[100%] flex justify-center items-center min-h-screen p-4 ">
+      <div
+        className="flex flex-col items-center justify-center  w-[60%] md:w-[60%] max-w-[600px] p-4  border rounded-md"
+        data-theme={selectedTheme}
+        key={renderKey}
+        style={{ background: bgColor, color: textColor }}
+      >
+        <h1
+          className="text-3xl font-extrabold text-primary text-center"
+          style={{ color: headingColor }}
+        >
           {formData.formTitle || formData.title}
         </h1>
-        <h2 className="text-xl font-bold text-gray-600 text-center">
+        <h2 className="text-xl font-bold text-center">
           {formData.formSubheading || formData.subheading}
         </h2>
 
@@ -33,29 +70,55 @@ const FormUi = ({ formData }) => {
           {formData &&
             formData.fields &&
             formData.fields.map((field, index) => {
-              if (field.fieldType === "select") {
+              if (
+                field.inputType === "select" ||
+                field.inputTagName === "select" ||
+                field.fieldType === "select"
+              ) {
                 return (
-                  <Select className="w-full" key={index}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={field.fieldLabel} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {field.options.map((option, index) => (
-                        <SelectItem key={index} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div
+                    className="flex items-center justify-between mt-4 gap-2"
+                    key={index}
+                  >
+                    <Select className="w-full">
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={field.fieldLabel} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options.map((option, index) => (
+                          <SelectItem key={index} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldEdit
+                      index={index}
+                      defaultValue={field}
+                      onUpdate={onUpdate}
+                      deleteField={deleteField}
+                    />
+                  </div>
                 );
-              } else if (field.fieldType === "textarea") {
+              } else if (
+                field.inputType === "textarea" ||
+                field.inputTagName === "textarea" ||
+                field.fieldType === "textarea"
+              ) {
                 return (
-                  <div className="w-full p-2  rounded my-2" key={index}>
+                  <div className="w-full  rounded mt-4" key={index}>
                     <Label
                       htmlFor={field.fieldName}
-                      className="text-gray-500 text-sm"
+                      className=" text-sm flex justify-between items-center"
                     >
                       {field.fieldLabel}
+
+                      <FieldEdit
+                        index={index}
+                        defaultValue={field}
+                        onUpdate={onUpdate}
+                        deleteField={deleteField}
+                      />
                     </Label>
                     <Textarea
                       key={index}
@@ -64,11 +127,15 @@ const FormUi = ({ formData }) => {
                     />
                   </div>
                 );
-              } else if (field.fieldType === "radio") {
+              } else if (
+                field.inputType === "radio" ||
+                field.inputTagName === "radio" ||
+                field.fieldType === "radio"
+              ) {
                 return (
                   <RadioGroup
                     defaultValue="option-one"
-                    className="flex items-center gap-4 mt-4 text-gray-500"
+                    className="flex items-center gap-4 mt-4 "
                     key={index}
                   >
                     <Label>{field.fieldLabel}</Label>
@@ -84,14 +151,32 @@ const FormUi = ({ formData }) => {
                           </div>
                         );
                       })}
+                    <FieldEdit
+                      index={index}
+                      defaultValue={field}
+                      onUpdate={onUpdate}
+                      deleteField={deleteField}
+                    />
                   </RadioGroup>
                 );
-              } else if (field.fieldType === "checkbox") {
+              } else if (
+                field.inputType === "checkbox" ||
+                field.inputTagName === "checkbox" ||
+                field.fieldType === "checkbox"
+              ) {
                 if (field.options && field.options.length > 0) {
                   return (
-                    <div className="flex gap-4 items-center mt-4">
-                      <Label>{field.fieldLabel}</Label>
-                      <div className="flex items-center gap-2  text-gray-500">
+                    <div className=" gap-4 items-center mt-4 " key={index}>
+                      <Label className="flex justify-between items-center">
+                        {field.fieldLabel}
+                        <FieldEdit
+                          index={index}
+                          defaultValue={field}
+                          onUpdate={onUpdate}
+                          deleteField={deleteField}
+                        />
+                      </Label>
+                      <div className="flex  gap-2  ">
                         {field.options.map((option, index) => {
                           return (
                             <div
@@ -111,29 +196,43 @@ const FormUi = ({ formData }) => {
                 } else {
                   return (
                     <div
-                      className="flex items-center gap-2 mt-4 text-gray-500"
+                      className="flex items-center gap-2 mt-4 justify-between"
                       key={index}
                     >
                       <Checkbox name={field.fieldName} id={field.fieldName} />
                       <Label htmlFor={field.fieldName}>
                         {field.fieldLabel}
                       </Label>
+
+                      <FieldEdit
+                        index={index}
+                        defaultValue={field}
+                        onUpdate={onUpdate}
+                        deleteField={deleteField}
+                      />
                     </div>
                   );
                 }
               } else {
                 return (
-                  <div className="w-full p-2  rounded my-2" key={index}>
+                  <div className="w-full  rounded mt-4 " key={index}>
                     <Label
                       htmlFor={field.fieldName}
-                      className="text-gray-500 text-sm"
+                      className=" text-sm flex justify-between items-center "
                     >
                       {field.fieldLabel}
+                      <FieldEdit
+                        index={index}
+                        defaultValue={field}
+                        onUpdate={onUpdate}
+                        deleteField={deleteField}
+                      />
                     </Label>
                     <Input
                       className="w-full p-2 border rounded my-1"
                       placeholder={field.placeholder}
                       name={field.fieldName}
+                      type={field.fieldType}
                     />
                   </div>
                 );
@@ -149,6 +248,11 @@ const FormUi = ({ formData }) => {
                     key={index}
                     className=" p-2 rounded my-2 mx-2"
                     variant={button.type === "reset" ? "outline" : ""}
+                    style={
+                      button.type === "submit"
+                        ? { background: headingColor }
+                        : {}
+                    }
                   >
                     {button.value || button.label}
                   </Button>

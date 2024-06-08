@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../config/firestoreConfig";
@@ -19,7 +20,8 @@ export const createForms = async (formsData, userId) => {
       id: docId,
       createdBy: userId,
       createdAt: new Date().toISOString(),
-      formsData: formsData,
+      formData: JSON.parse(formsData),
+      lastUpdated: new Date().toISOString(),
     });
 
     return docId;
@@ -48,6 +50,19 @@ export const getOneForm = async (formId) => {
     return docSnap.data();
   } else {
     console.log("No such document!");
+  }
+};
+
+export const updateForm = async (formId, formData) => {
+  const docRef = doc(db, "forms", formId);
+  try {
+    await updateDoc(docRef, {
+      formData: formData,
+      lastUpdated: new Date().toISOString(),
+    });
+    return true;
+  } catch (e) {
+    console.error("Error updating document: ", e);
   }
 };
 //? Path: src/firebaseUtils/fireStoreCrud.jsx
