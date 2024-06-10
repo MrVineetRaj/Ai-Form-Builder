@@ -2,6 +2,7 @@
 
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -25,7 +26,8 @@ export const createForms = async (formsData, userId) => {
       lastUpdated: new Date().toISOString(),
       colors: {
         textColor: "#000000",
-        bgColor: "#ffffff",
+        bgExternalColor: "#ffffff",
+        bgInternalColor: "#ffffff",
         headingColor: "#000000",
         buttonTextColor: "#ffffff",
       },
@@ -37,10 +39,10 @@ export const createForms = async (formsData, userId) => {
   }
 };
 
-export const getForms = async (userId) => {
+export const getAllForms = async (username) => {
   const forms = [];
   const formsRef = collection(db, "forms");
-  const q = query(formsRef, where("createdBy", "==", userId));
+  const q = query(formsRef, where("createdBy", "==", username));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     forms.push(doc.data());
@@ -85,4 +87,44 @@ export const updateColors = async (formId, newColors) => {
     console.error("Error updating document: ", e);
   }
 };
+
+
+export const deleteForm = async (formId) => {
+  const docRef = doc(db, "forms", formId);
+  try {
+    await deleteDoc(docRef);
+    return true;
+  } catch (e) {
+    console.error("Error deleting document: ", e);
+  }
+}
+
+export const newFormInput = async (formId, input) => {
+  const docId = Date.now().toString();
+  const docRef = doc(db, "formInputs", docId);
+  try {
+    await setDoc(docRef, {
+      id: docId,
+      userInput: input,
+      parentForm: formId,
+      submittedAt: new Date().toISOString(),
+    });
+    return docId;
+  } catch (e) {
+    console.error("Error updating document: ", e);
+  }
+}
+
+
+export const getFormInputs = async (formId) => {
+  const inputs = [];
+  const inputsRef = collection(db, "formInputs");
+  const q = query(inputsRef, where("parentForm", "==", formId));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    inputs.push(doc.data());
+  });
+
+  return inputs;
+}
 //? Path: src/firebaseUtils/fireStoreCrud.jsx

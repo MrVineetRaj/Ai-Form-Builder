@@ -30,7 +30,7 @@ const CreateForm = () => {
     let prompt =
       "description " +
       userInput +
-      " ,on the basis of description please give me form in json formate with form title,form subheading with input tag name, field name ,placeholder , field label ,fieldType , fieldRequired and atleast two form buttons for html form tag and. just json formate nothing else needed also don't send ```json from start and ``` from end of json formate.";
+      " ,on the basis of description please give me form in json formate with form title,form subheading with input tag name, field name ,placeholder , field label ,fieldType , fieldRequired and atleast use camel case name convention two form buttons for html form tag and. just json formate nothing else needed also don't send ```json from start and ``` from end of json formate.";
 
     const result = await AiChatSession.sendMessage(prompt);
     let formId = await createForms(result.response.text(), user?.username);
@@ -47,7 +47,7 @@ const CreateForm = () => {
           setOpenDialog(true);
         }}
       >
-        {!isLoading ? " + Create Form" : <Loader2 className="animate-spin"/>}
+        {!isLoading ? " + Create Form" : <Loader2 className="animate-spin" />}
       </Button>
       <Dialog open={openDialog}>
         <DialogContent>

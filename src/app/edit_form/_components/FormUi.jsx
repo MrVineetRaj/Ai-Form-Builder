@@ -19,8 +19,8 @@ import FieldEdit from "./FieldEdit";
 const FormUi = ({
   formData,
   onFormUpdate,
-
-  bgColor,
+  bgExternalColor,
+  bgInternalColor,
   textColor,
   headingColor,
   buttonTextColor,
@@ -31,7 +31,7 @@ const FormUi = ({
 
   useEffect(() => {
     setRenderKey(renderKey + 1);
-  }, [bgColor, textColor, headingColor, buttonTextColor]);
+  }, [bgExternalColor,bgInternalColor, textColor, headingColor, buttonTextColor]);
 
   const [renderKey, setRenderKey] = useState(0);
   const onUpdate = (data, index) => {
@@ -49,11 +49,13 @@ const FormUi = ({
     onFormUpdate(formData);
   };
   return (
-    <div className="w-[100%] flex justify-center items-center min-h-screen p-4 ">
+    <div className="w-[100%] flex justify-center items-center min-h-screen p-4 "
+    style={{ background: bgExternalColor}}
+    >
       <div
-        className="flex flex-col items-center justify-center  w-[60%] md:w-[60%] max-w-[600px] p-4  border rounded-md"
+        className="flex flex-col items-center justify-center  w-[60%] md:w-[60%] max-w-[600px] p-8  border rounded-md"
         key={renderKey}
-        style={{ background: bgColor, color: textColor }}
+        style={{ background: bgInternalColor, color: textColor }}
       >
         <h1
           className="text-3xl font-extrabold text-primary text-center"
@@ -240,8 +242,8 @@ const FormUi = ({
 
           <div className="w-full flex justify-center items-center">
             {formData &&
-              formData.buttons &&
-              formData.buttons.map((button, index) => {
+              formData.formButtons &&
+              formData.formButtons.map((button, index) => {
                 return (
                   <Button
                     key={index}

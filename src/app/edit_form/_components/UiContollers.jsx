@@ -5,7 +5,8 @@ import { SaveIcon } from "lucide-react";
 import React from "react";
 
 const UiControllers = ({
-  setBgColor,
+  setBgExternalColor,
+  setBgInternalColor,
   setTextColor,
   setHeadingColor,
   setButtonTextColor,
@@ -49,14 +50,25 @@ const UiControllers = ({
           }}
         />
       )}
-      <h2 className="mt-8 my-2 text-xl font-bold">Background </h2>
+      <h2 className="mt-8 my-2 text-xl font-bold">External Background </h2>
       {controlPanelRender && (
         <input
           className="rounded-full w-full h-5 overflow-hidden cursor-pointer"
           defaultValue={"#ffffff"}
           type="color"
           onChange={(event) => {
-            setBgColor(event.target.value);
+            setBgExternalColor(event.target.value);
+          }}
+        />
+      )}
+      <h2 className="mt-8 my-2 text-xl font-bold">Internal Background </h2>
+      {controlPanelRender && (
+        <input
+          className="rounded-full w-full h-5 overflow-hidden cursor-pointer"
+          defaultValue={"#ffffff"}
+          type="color"
+          onChange={(event) => {
+            setBgInternalColor(event.target.value);
           }}
         />
       )}

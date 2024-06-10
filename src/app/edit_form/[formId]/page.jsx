@@ -19,7 +19,8 @@ const EditForm = ({ params }) => {
   const [formData, setFormData] = useState({});
   const [renderKey, setRenderKey] = useState(0);
 
-  const [bgColor, setBgColor] = useState("white");
+  const [bgInternalColor, setBgInternalColor] = useState("white");
+  const [bgExternalColor, setBgExternalColor] = useState("white");
   const [headingColor, setHeadingColor] = useState("black");
   const [textColor, setTextColor] = useState("black");
   const [buttonTextColor, setButtonTextColor] = useState("white");
@@ -32,7 +33,8 @@ const EditForm = ({ params }) => {
         const res = data.formData;
         setFormData(res);
 
-        setBgColor(data.colors.bgColor);
+        setBgExternalColor(data.colors.bgExternalColor);
+        setBgInternalColor(data.colors.bgInternalColor);
         setTextColor(data.colors.textColor);
         setHeadingColor(data.colors.headingColor);
         setButtonTextColor(data.colors.buttonTextColor);
@@ -53,7 +55,8 @@ const EditForm = ({ params }) => {
   const onColorUpdate = async () => {
     let newColors = {
       textColor: textColor,
-      bgColor: bgColor,
+      bgExternalColor: bgExternalColor,
+      bgInternalColor: bgInternalColor,
       headingColor: headingColor,
       buttonTextColor: buttonTextColor,
     };
@@ -72,9 +75,10 @@ const EditForm = ({ params }) => {
         </span>
         <span className="flex gap-2 items-center">
           <a
-          href={"/live-preview/"+formId }
-          target="_blank"
-          className="bg-primary flex gap-2 hover:bg-purple-800 cursor-pointer items-center font-semibold text-white py-2 px-4 rounded-md">
+            href={"/live-preview/" + formId}
+            target="_blank"
+            className="bg-primary flex gap-2 hover:bg-purple-800 cursor-pointer items-center font-semibold text-white py-2 px-4 rounded-md"
+          >
             <SquareArrowOutUpRight />
             Live Preview
           </a>
@@ -87,10 +91,11 @@ const EditForm = ({ params }) => {
       <div className="flex flex-col lg:flex-row w-full">
         <div className="w-[300px] m-2 p-5 min-h-screen border-2 rounded-lg">
           <UiControllers
-            setBgColor={setBgColor}
             setTextColor={setTextColor}
             setHeadingColor={setHeadingColor}
             setButtonTextColor={setButtonTextColor}
+            setBgExternalColor={setBgExternalColor}
+            setBgInternalColor={setBgInternalColor}
             onColorUpdate={onColorUpdate}
             controlPanelRender={controlPanelRender}
           />
@@ -102,10 +107,11 @@ const EditForm = ({ params }) => {
           <FormUi
             formData={formData}
             onFormUpdate={onFormUpdate}
-            bgColor={bgColor}
             textColor={textColor}
             headingColor={headingColor}
             buttonTextColor={buttonTextColor}
+            bgInternalColor={bgInternalColor}
+            bgExternalColor={bgExternalColor}
           />
         </div>
       </div>
